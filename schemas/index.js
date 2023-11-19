@@ -4,9 +4,9 @@ const config = require('../config/key');
 // 몽구스 연결 함수
 const connect = async () => {
     mongoose.set('debug', true); // 디버깅용 : 몽고 쿼리가 콘솔에서 뜨게 한다.
-    console.log(config.mongoURI);
+    console.log(config.stockURI);
     try {
-      await mongoose.connect(config.mongoURI);  
+      await mongoose.connect(config.stockURI);  
       console.log('MongoDB connected successfully');
     } catch (error) {
       console.error('MongoDB connection error:', error);

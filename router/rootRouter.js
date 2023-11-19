@@ -3,10 +3,18 @@ const router = express.Router();
 const baseResponse = require('../config/baseResponse');
 const response = require('../config/response');
 const userController = require('../controller/userController');
+const User = require('../schemas/userinfo');
+const common = require('../controller/common');
 
 router.get('/', async (req,res) => {
 
-    const userObject = { seed_money: 1234 };
+    if (common.checkUserId(req)) { // 세션 이미 존재하는 경우
+        userController.verify(req,res);
+        return;
+    }
+
+    // 세션 없을 때 초기 생성
+    const userObject = { seed_money: 1234, invest_start: Date.now(), invest_end: Date.now() };
 
     try {
         const User = require('../schemas/userinfo');
@@ -22,54 +30,9 @@ router.get('/', async (req,res) => {
 });
 
 router.post('/create', userController.create);
+router.get('/verify', userController.verify);
+router.post('/update', userController.update);
+router.get('/delete', userController.delete);
 
-router.get('/verify', async (req,res) => {
- 
-    try {
-        const User = require('../schemas/userinfo');
-        const result = await User.find({ _id: req.session.user_id});
-        // const result = await User.find({ user_id: 1});
-        res.status(200).json(response(baseResponse.SUCCESS, result));
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(response(baseResponse.SERVER_ERROR, error.message));
-    }
-
-});
-
-router.get('/update', async (req,res) => {
-    try {
-        const User = require('../schemas/userinfo');
-        const query = { seed_money: 14231234 };
-        const result = await  User.findByIdAndUpdate(req.session.user_id, query); // id 에 해당하는 doc 의 정보를 query 의 내용대로 수정
-        res.status(200).json(response(baseResponse.SUCCESS, result));
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(response(baseResponse.SERVER_ERROR, error.message));
-    }
-});
-
-router.get('/delete', async (req,res) => {
-    try {
-        const User = require('../schemas/userinfo');
-        const result = await User.findByIdAndDelete(req.session.user_id);
-
-        req.session.destroy((err) => {
-            if (err) {
-                console.error('Failed to destroy session:', err);
-                res.status(500).json({ success: false, error: 'Failed to destroy session' });
-            } else {
-                res.clearCookie('connect.sid'); // 세션 쿠키를 지우는 것이 좋습니다.
-                res.status(200).json({ success: true, message: 'Logout successful', result });
-            }
-        });
-
-        // res.status(200).json(response(baseResponse.SUCCESS, result));
-
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(response(baseResponse.SERVER_ERROR, error.message));
-    }
-});
 
 module.exports = router;
