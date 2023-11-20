@@ -1,13 +1,15 @@
 const express = require('express');
 const app = express();
-
+const cors = require('cors'); //CORS
+app.use(cors());
 // Router
 const rootRouter = require('./router/rootRouter');
+const stockRouter = require('./router/stockRouter');
 
 // MongoDB Connect
 const connect = require('./schemas');
 connect().then(() => {
-  
+
   // Session Modules
   const config = require("./config/key"); // 세션키
   const session = require('express-session');
@@ -33,6 +35,7 @@ connect().then(() => {
 
   // 라우터 호출
   app.use('/', rootRouter);
+  app.use('/stock', stockRouter);
 
   // 만일 위 라우터에서 요청이 end되지않으면 실행 -> 라우터 없음
   const baseResponse = require('./config/baseResponse');
