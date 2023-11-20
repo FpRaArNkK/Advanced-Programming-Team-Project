@@ -58,7 +58,7 @@ module.exports = {
             const query = { selected_stocks: input_array };
             const result = await  User.findByIdAndUpdate(req.session.user_id, query, {new : true}); // id 에 해당하는 doc 의 정보를 query 의 내용대로 수정
             req.session.selected_stocks = input_array; 
-            res.status(200).json(response(baseResponse.SUCCESS, result));
+            res.status(200).json(response(baseResponse.SUCCESS, input_array));
         } catch (err) {
             console.log(err);
             res.status(500).json(response(baseResponse.SERVER_ERROR, error.message));
@@ -85,9 +85,9 @@ module.exports = {
 
         try {
             const query = { selected_stocks: input_array };
-            const result = await  User.findByIdAndUpdate(req.session.user_id, query, {new : true}); // id 에 해당하는 doc 의 정보를 query 의 내용대로 수정
+            const result = await  User.findByIdAndUpdate(req.session.user_id, query); // id 에 해당하는 doc 의 정보를 query 의 내용대로 수정
             req.session.selected_stocks = input_array; 
-            res.status(200).json(response(baseResponse.SUCCESS, result));
+            res.status(200).json(response(baseResponse.SUCCESS, input_array));
         } catch (err) {
             console.log(err);
             res.status(500).json(response(baseResponse.SERVER_ERROR, error.message));

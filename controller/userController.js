@@ -59,7 +59,7 @@ module.exports = {
             req.session.seed_money = object.seed_money;
             req.session.invest_start = object.invest_start;
             req.session.invest_end = object.invest_end;
-            res.status(200).json(response(baseResponse.SUCCESS, result));
+            res.status(200).json(response(baseResponse.SUCCESS, object));
         } catch (err) {
             console.log(err);
             res.status(500).json(response(baseResponse.SERVER_ERROR, error.message));
