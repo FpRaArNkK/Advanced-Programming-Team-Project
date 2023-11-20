@@ -10,6 +10,6 @@ const stockController = require('../controller/stockController');
 // const cors = require('cors');
 // router.use(cors());
 
-router.post('/search/:type', stockController.search);
+router.get('/search/:type', stockController.search);
 
 module.exports = router;

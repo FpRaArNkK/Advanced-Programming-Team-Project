@@ -12,12 +12,14 @@ module.exports = {
         const result_02 = spawn('python3', ['./controller/pyStocks.py']);
         // "카레유", 20"을 파라미터로 전달
         result_02.stdout.on('data', (result)=>{
-            console.log(result.toString());
-            res.status(200).json(response(baseResponse.SUCCESS, result.toString));
+            // console.log(result.toString());
+            // res.status(200).json(response(baseResponse.SUCCESS, result.toString));
+            return result;
         });
         result_02.stderr.on('data', (result)=>{
-            console.log(result.toString());
-            res.status(200).json(response(baseResponse.SUCCESS, result.toString));
+            // console.log(result.toString());
+            // res.status(200).json(response(baseResponse.SUCCESS, result.toString));
+            return result;
         });
 
                 // const result = spawn('python', ['print.py']);
@@ -54,26 +56,46 @@ module.exports = {
 
     get_names_by_theme: async (themeCode) => {
 
-        switch (theme) {
-            case 'TE':
-            case 'CP':
-            case 'SF':
-            case 'CR':
-            case 'MP':
-            case 'DC':
-            default:
-                break;
-        }
-
-        const result = spawn('python3', ['./controller/pyStocks.py', stockGroupList]);
-        // "카레유", 20"을 파라미터로 전달
-        result_02.stdout.on('data', (result)=>{
-            console.log(result.toString());
-            res.status(200).json(response(baseResponse.SUCCESS, result.toString));
-        });
-        result_02.stderr.on('data', (result)=>{
-            console.log(result.toString());
-            res.status(200).json(response(baseResponse.SUCCESS, result.toString));
+        return new Promise((resolve, reject) => {
+            let stockGroupList = [];
+            console.log(themeCode);
+            switch (themeCode) {
+                case 'TE':
+                    stockGroupList = [" 전기/전자", " 전기가스업"];
+                    break;
+                case 'CP':
+                    stockGroupList = [" 화학", " 의약품"];
+                    break;
+                case 'SF':
+                    stockGroupList = [" 서비스업", " 금융업", " 은행", " 증권", " 운수창고", " 보험", " 기타"];
+                    break;
+                case 'CR':
+                    stockGroupList = [" 건설업", " 철강및금속", " 비금속광물", " 운수장비", " 종이/목재"];
+                    break;
+                case 'MP':
+                    stockGroupList = [" 기계", " 음식료품", " 섬유/의복", " 의료정밀", " 제조업"];
+                    break;
+                case 'DC':
+                    stockGroupList = [" 유통업", " 통신업"];
+                    break;
+                default:
+                    break;
+            }
+            // console.log(stockGroupList);
+            const result = spawn('python3', ['./controller/pyStocks.py', stockGroupList]);
+            // "카레유", 20"을 파라미터로 전달
+            result.stdout.on('data', (result)=>{
+                // console.log(result.toString());
+                // res.status(200).json(response(baseResponse.SUCCESS, result.toString));
+                // return result;
+                resolve(result.toString());
+            });
+            result.stderr.on('data', (error)=>{
+                // console.log(result.toString());
+                // res.status(200).json(response(baseResponse.SUCCESS, result.toString));
+                // return result;
+                reject(error.toString());
+            });
         });
     }
     
