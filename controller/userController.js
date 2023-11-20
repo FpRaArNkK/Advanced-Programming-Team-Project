@@ -55,7 +55,10 @@ module.exports = {
         try {
             // const User = require('../schemas/userinfo');
             const query = { seed_money: object.seed_money, invest_start: object.invest_start, invest_end: object.invest_end };
-            const result = await  User.findByIdAndUpdate(req.session.user_id, query); // id 에 해당하는 doc 의 정보를 query 의 내용대로 수정
+            const result = await  User.findByIdAndUpdate(req.session.user_id, query, {new : true}); // id 에 해당하는 doc 의 정보를 query 의 내용대로 수정
+            req.session.seed_money = object.seed_money;
+            req.session.invest_start = object.invest_start;
+            req.session.invest_end = object.invest_end;
             res.status(200).json(response(baseResponse.SUCCESS, result));
         } catch (err) {
             console.log(err);

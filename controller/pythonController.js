@@ -82,8 +82,7 @@ module.exports = {
                     break;
             }
             // console.log(stockGroupList);
-            const result = spawn('python3', ['./controller/pyStocks.py', stockGroupList]);
-            // "카레유", 20"을 파라미터로 전달
+            const result = spawn('python3', ['./controller/pyStocks.py', stockGroupList, "get_names_by_theme"]);
             result.stdout.on('data', (result)=>{
                 // console.log(result.toString());
                 // res.status(200).json(response(baseResponse.SUCCESS, result.toString));
@@ -94,6 +93,19 @@ module.exports = {
                 // console.log(result.toString());
                 // res.status(200).json(response(baseResponse.SUCCESS, result.toString));
                 // return result;
+                reject(error.toString());
+            });
+        });
+    },
+
+    get_names_by_name: async (name) => {
+        const stockName = name;
+        return new Promise((resolve, reject) => {
+            const result = spawn('python3', ['./controller/pyStocks.py', stockName, "get_names_by_name"]);
+            result.stdout.on('data', (result)=>{
+                resolve(result.toString());
+            });
+            result.stderr.on('data', (error)=>{
                 reject(error.toString());
             });
         });

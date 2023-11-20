@@ -18,7 +18,7 @@ router.get('/', async (req,res) => {
     }
 
     // 세션 없을 때 초기 생성
-    const userObject = { seed_money: 1234, invest_start: Date.now(), invest_end: Date.now() };
+    const userObject = { seed_money: 0, invest_start: Date.now(), invest_end: Date.now() };
 
     try {
         const User = require('../schemas/userinfo');

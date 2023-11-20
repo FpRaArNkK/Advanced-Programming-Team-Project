@@ -11,5 +11,7 @@ const stockController = require('../controller/stockController');
 // router.use(cors());
 
 router.get('/search/:type', stockController.search);
+router.post('/post/stocks', stockController.post_stocks);
+router.post('/post/weights', stockController.post_weights);
 
 module.exports = router;
