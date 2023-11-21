@@ -136,7 +136,14 @@ module.exports = {
                 const temp = result.toString();
                 const temp2 = temp.split('\n');
                 const data = temp2.slice(1);
-                resolve(data);
+
+                const separatedItems = data.map(item => {
+                    const [stock, weight] = item.split(/\s+/); // 공백을 기준으로 분할
+                    return { stock: stock.trim(), weight: parseFloat(weight) }; // 이름과 숫자 추출 후 객체로 반환
+                }).filter(item => item.stock && !isNaN(item.weight)); // 이름이 있고, 숫자인 항목만 필터링
+                console.log(separatedItems);
+
+                resolve(separatedItems);
             });
             result.stderr.on('data', (error)=>{
                 reject(error.toString());

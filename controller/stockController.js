@@ -138,11 +138,19 @@ module.exports = {
 
     portfolio_recommend: async (req,res) => {
         const post = req.body;
-
         const model_name = req.params.model;
         const stock_array = post.names;
         const start_date = post.start_date;
         const end_date = post.end_date;
+        // const selected_stocks = req.session.selected_stocks
+        // const start_date = req.session.invest_start;
+        // const end_date = req.session.invest_end;
+
+        // const stock_array = [];
+        // // 객체 배열을 순회하며 stocks 배열에 데이터 추가
+        // selected_stocks.forEach(item => {
+        //     stock_array.push(item.stock);
+        // });
 
         // console.log(stock_array);
         // const trimmed = names.replace(/'/g, ''); // 따옴표 제거
