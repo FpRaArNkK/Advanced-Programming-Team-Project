@@ -90,7 +90,8 @@ module.exports = {
         const stock_array = trimmed.split(',');
 
         const weights = post.weights;
-        const weight_array = weights.slice(1, -1).split(',');
+        // const weight_array = weights.slice(1, -1).split(',');
+        const weight_array = weights.split(',');
 
 
         let input_array = [];
@@ -102,6 +103,7 @@ module.exports = {
 
         try {
             const query = { selected_stocks: input_array };
+            console.log(`UPDATE : session.user_id = ${req.session.user_id}, query = ${query}`);
             const result = await  User.findByIdAndUpdate(req.session.user_id, query); // id 에 해당하는 doc 의 정보를 query 의 내용대로 수정
             req.session.selected_stocks = input_array; 
             res.status(200).json(response(baseResponse.SUCCESS, input_array));
