@@ -10,7 +10,7 @@
 const baseUrl = 'mongodb://' +
     'frank:alstj1184!' + // 관리자아이디 : 비밀번호
     '@' +
-    '54.180.150.186' + // host
+    '3.39.95.95' + // host
     ':27017'; // port
 
 const adminUrl = baseUrl + '/admin';
