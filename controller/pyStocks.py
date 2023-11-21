@@ -86,13 +86,17 @@ def get_names_by_index(index):
     fin_ex_Growth = yoy.query('(매출액 > 0.3) & (영업이익 > 0.3) & (당기순이익 > 0.3)')['Name'].unique()[:50] #.set_index('Name').index
     
     if (index == "profit") :
+        # result = ', '.join(fin_ex_Profit)
+        # result = ast.literal_eval(fin_ex_Profit)
         print(fin_ex_Profit)
 
     if (index == "stability"):
-        print(fin_combi_Stabililty_A)
+        result = ', '.join(fin_combi_Stabililty_A)
+        print(result)
 
     if (index == "growth"):
-        print(fin_ex_Growth)
+        result = ', '.join(fin_ex_Growth)
+        print(result)
        
 
 def Risk_Contribution(weight,cov_matrix) :

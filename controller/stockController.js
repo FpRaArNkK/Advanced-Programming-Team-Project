@@ -37,7 +37,17 @@ module.exports = {
             case 'index':
                 pythonController.get_names_by_index(index)
                 .then((result) => {
-                    res.status(200).json(response(baseResponse.SUCCESS,result));
+                    console.log(result)
+                    // 줄 바꿈 문자인 \n을 공백으로 치환하여 줄 바꿈을 제거
+                    stringValues = result.replace(/\n/g, '');
+
+                    // 작은 따옴표를 추가한 후에 큰 따옴표로 묶고, 제거해줍니다.
+                    stringValues = stringValues.slice(2, -2);
+
+                    // 문자열을 배열로 변환
+                    let resultVal = stringValues.split("' '");
+
+                    res.status(200).json(response(baseResponse.SUCCESS,resultVal));
                 })
                 .catch((error) => {
                     console.error('Error:', error);

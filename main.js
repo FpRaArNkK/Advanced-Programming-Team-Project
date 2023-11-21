@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors'); //CORS
+
 app.use(cors({ 
    origin: ["http://3.39.95.95:3000", "http://localhost:3000"],
   //origin: '*',
