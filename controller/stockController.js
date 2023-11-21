@@ -130,7 +130,7 @@ module.exports = {
 
         pythonController.portfolio_recommend(stock_array, model_name, start_date, end_date)
                 .then((result) => {
-                    console.log('???');
+                    // console.log('???');
                     res.status(200).json(response(baseResponse.SUCCESS,result));
                 })
                 .catch((error) => {
