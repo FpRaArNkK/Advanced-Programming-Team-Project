@@ -37,7 +37,7 @@ module.exports = {
             case 'index':
                 pythonController.get_names_by_index(index)
                 .then((result) => {
-                    console.log(result)
+                    // console.log(result)
                     // 줄 바꿈 문자인 \n을 공백으로 치환하여 줄 바꿈을 제거
                     stringValues = result.replace(/\n/g, '');
 
