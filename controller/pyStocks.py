@@ -129,25 +129,33 @@ def risk_parity_optimization(cov_matrix, df):
     return  round(Risk_Parity_Allocation*100,2)             
 
 def portfolio_recommend_risk_parity(stock_array,start_date,end_date):
+    try:
+        # print(stock_array)
+        # test_arr = ast.literal_eval(stock_array)
+        test_arr = stock_array.split(',') 
+        # print(test_arr)
+
+        current_dir = os.path.dirname(os.path.realpath(__file__))  # 현재 실행 중인 스크립트의 디렉터리 경로 가져오기
+        folder_dir = os.path.join(current_dir, '../data')  # 상위 디렉터리의 'data' 폴더 경로 설정
+        DATA_FILE = "kSE수정종가.xlsx"
+
+        data_wb = pd.ExcelFile(folder_dir + "/" + DATA_FILE)
+
+        adj_price = data_wb.parse("Sheet1",  index_col=0)
+        
+        universe =adj_price[test_arr].loc[start_date:end_date]
+        # print(universe)
+        df=universe.resample('M').last().pct_change(1)  
+
+        covmat= np.array(df.cov()*12)      # 수익률의 공분산
+
+        rpo=risk_parity_optimization(covmat, df) 
+        
+        print(rpo)
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
     
-    test_arr = ast.literal_eval(stock_array)
-
-    current_dir = os.path.dirname(os.path.realpath(__file__))  # 현재 실행 중인 스크립트의 디렉터리 경로 가져오기
-    folder_dir = os.path.join(current_dir, '../data')  # 상위 디렉터리의 'data' 폴더 경로 설정
-    DATA_FILE = "kSE수정종가.xlsx"
-
-    data_wb = pd.ExcelFile(folder_dir + "/" + DATA_FILE)
-
-    adj_price = data_wb.parse("Sheet1",  index_col=0)
-
-    universe =adj_price[test_arr].loc[start_date:end_date]
-    df=universe.resample('M').last().pct_change(1)  
-
-    covmat= np.array(df.cov()*12)      # 수익률의 공분산
-
-    rpo=risk_parity_optimization(covmat, df) 
-
-    print(rpo)
         
     
 
@@ -169,6 +177,6 @@ if __name__ == '__main__':
         stock_array = sys.argv[1]
         start_date = sys.argv[3]
         end_date = sys.argv[4]
-        # themes_list = inputLine.split(',') # 쉼표로 분할된 문자열을 배열로 변환
+
         portfolio_recommend_risk_parity(stock_array,start_date,end_date)
     

@@ -128,10 +128,14 @@ module.exports = {
         const input_array = stock_array;
         const model = model_name;
 
+        const s_d = start_date.slice(0, -3).toString();
+        const e_d = end_date.slice(0, -3).toString();;
+
         console.log(input_array);
         return new Promise((resolve, reject) => {
-            const result = spawn('python3', ['./controller/pyStocks.py', input_array, "portfolio_recommend_"+model, start_date, end_date]);
-            console.log('데이터 처리중...')
+            const result = spawn('python3', ['./controller/pyStocks.py', input_array, "portfolio_recommend_"+model, s_d, e_d]);
+            console.log('데이터 처리중...');
+            console.log(s_d,e_d);
             result.stdout.on('data', (result)=>{
                 const temp = result.toString();
                 const temp2 = temp.split('\n');
@@ -144,6 +148,7 @@ module.exports = {
                 console.log(separatedItems);
 
                 resolve(separatedItems);
+                // resolve(result.toString());
             });
             result.stderr.on('data', (error)=>{
                 reject(error.toString());

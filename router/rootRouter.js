@@ -10,28 +10,28 @@ const common = require('../controller/common');
 // const cors = require('cors');
 // router.use(cors());
 
-router.get('/', async (req,res) => {
+// router.get('/', async (req,res) => {
 
-    if (common.checkUserId(req)) { // 세션 이미 존재하는 경우
-        userController.verify(req,res);
-        return;
-    }
+//     if (common.checkUserId(req)) { // 세션 이미 존재하는 경우
+//         userController.verify(req,res);
+//         return;
+//     }
 
-    // 세션 없을 때 초기 생성
-    const userObject = { seed_money: 0, invest_start: Date.now(), invest_end: Date.now() };
+//     // 세션 없을 때 초기 생성
+//     const userObject = { seed_money: 0, invest_start: Date.now(), invest_end: Date.now() };
 
-    try {
-        const User = require('../schemas/userinfo');
-        const user = await User.create(userObject);
+//     try {
+//         const User = require('../schemas/userinfo');
+//         const user = await User.create(userObject);
 
-        req.session.user_id = user._id;
-        console.log(req.session.user_id);
+//         req.session.user_id = user._id;
+//         console.log(req.session.user_id);
 
-        res.status(200).json(response(baseResponse.SUCCESS,user));
-    } catch (err) {
-        console.log(err);
-    }
-});
+//         res.status(200).json(response(baseResponse.SUCCESS,user));
+//     } catch (err) {
+//         console.log(err);
+//     }
+// });
 
 router.post('/create', userController.create);
 router.get('/verify', userController.verify);
