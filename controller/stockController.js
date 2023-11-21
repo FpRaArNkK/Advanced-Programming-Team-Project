@@ -78,7 +78,8 @@ module.exports = {
     post_weights: async (req,res) => {
 
         if (req.session.user_id == undefined) {
-            res.status(500).json(response(baseResponse.SERVER_ERROR, "세션ID가 존재하지 않습니다"));
+            // res.status(500).json(response(baseResponse.SERVER_ERROR, "세션ID가 존재하지 않습니다"));
+            res.redirect('/');
             return;
         }
 
