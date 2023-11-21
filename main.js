@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors'); //CORS
-app.use(cors());
+app.use(cors({ origin: "http://54.180.150.186:3000"}));
 // Router
 const rootRouter = require('./router/rootRouter');
 const stockRouter = require('./router/stockRouter');

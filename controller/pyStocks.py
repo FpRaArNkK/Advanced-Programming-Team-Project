@@ -136,7 +136,7 @@ def portfolio_recommend_risk_parity(stock_array,start_date,end_date):
 
     adj_price = data_wb.parse("Sheet1",  index_col=0)
 
-    universe =adj_price[test_arr].loc['2015-01-01':'2023-08-25']
+    universe =adj_price[test_arr].loc[start_date:end_date]
     df=universe.resample('M').last().pct_change(1)  
 
     covmat= np.array(df.cov()*12)      # 수익률의 공분산
