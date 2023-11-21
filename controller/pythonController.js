@@ -154,6 +154,21 @@ module.exports = {
                 reject(error.toString());
             });
         });
+    },
+
+    get_chart_and_result: async (stock_array, start_date, end_date, seed_money, weight_array) => {
+        return new Promise((resolve, reject) => {
+            const input_array = ['강남제비스코','대구백화점','남양유업','카카오','삼성SDI']
+            const weights = {'삼성SDI': 0.2471,'카카오': 0.2006,'남양유업': 0.2481,'대구백화점': 0.1616,'강남제비스코': 0.1426}
+            const result = spawn('python3', ['./controller/pyStocks.py', input_array, "get_chart_and_result", "2020-02-02", "2022-02-02", "1000000" , weights]);
+            console.log('데이터 처리중...');
+            result.stdout.on('data', (result)=>{
+                resolve(result.toString());
+            });
+            result.stderr.on('data', (error)=>{
+                reject(error.toString());
+            });
+        });
     }
     
 }

@@ -52,6 +52,8 @@ module.exports = {
             invest_end: post.invest_end
         };
 
+        console.log(object);
+
         if (common.checkUserId(req)) { // 세션 이미 존재하는 경우
             try {
                 // const User = require('../schemas/userinfo');

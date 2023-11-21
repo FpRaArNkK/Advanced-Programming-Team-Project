@@ -94,23 +94,6 @@ module.exports = {
         }
 
         const post = req.body;
-        // console.log(post);
-        // const names = post.names;
-        // const trimmed = names.replace(/'/g, ''); // 따옴표 제거
-        // // const stock_array = trimmed.slice(1, -1).split(',');
-        // const stock_array = trimmed.split(',');
-
-        // const weights = post.weights;
-        // // const weight_array = weights.slice(1, -1).split(',');
-        // const weight_array = weights.split(',');
-
-
-        // let input_array = [];
-
-        // for (let i = 0; i < stock_array.length; i++) {
-        //     const selected_stock = { stock: stock_array[i], weight: weight_array[i] };
-        //     input_array.push(selected_stock);
-        // }
 
         // 빈 배열 생성
         let input_array = [];
@@ -161,6 +144,18 @@ module.exports = {
         pythonController.portfolio_recommend(stock_array, model_name, start_date, end_date)
                 .then((result) => {
                     // console.log('???');
+                    res.status(200).json(response(baseResponse.SUCCESS,result));
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    res.status(500).json(response(baseResponse.SERVER_ERROR, error));
+                });
+    },
+
+    get_chart_and_result: async (req,res) => {
+        pythonController.get_chart_and_result()
+                .then((result) => {
+                    console.log(result);
                     res.status(200).json(response(baseResponse.SUCCESS,result));
                 })
                 .catch((error) => {

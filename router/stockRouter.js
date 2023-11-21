@@ -14,5 +14,6 @@ router.get('/search/:type', stockController.search);
 router.post('/post/stocks', stockController.post_stocks);
 router.post('/post/weights', stockController.post_weights);
 router.post('/post/portfolio/:model', stockController.portfolio_recommend);
+router.get('/get/result',stockController.get_chart_and_result);
 
 module.exports = router;
