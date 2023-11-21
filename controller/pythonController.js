@@ -58,7 +58,7 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
             let stockGroupList = [];
-            console.log(themeCode);
+            // console.log(themeCode);
             switch (themeCode) {
                 case 'TE':
                     stockGroupList = [" 전기/전자", " 전기가스업"];
@@ -117,6 +117,26 @@ module.exports = {
             const result = spawn('python3', ['./controller/pyStocks.py', inputIndex, "get_names_by_index"]);
             result.stdout.on('data', (result)=>{
                 resolve(result.toString());
+            });
+            result.stderr.on('data', (error)=>{
+                reject(error.toString());
+            });
+        });
+    },
+
+    portfolio_recommend: async (stock_array, model_name, start_date, end_date) => {
+        const input_array = stock_array;
+        const model = model_name;
+
+        console.log(input_array);
+        return new Promise((resolve, reject) => {
+            const result = spawn('python3', ['./controller/pyStocks.py', input_array, "portfolio_recommend_"+model, start_date, end_date]);
+            console.log('데이터 처리중...')
+            result.stdout.on('data', (result)=>{
+                const temp = result.toString();
+                const temp2 = temp.split('\n');
+                const data = temp2.slice(1);
+                resolve(data);
             });
             result.stderr.on('data', (error)=>{
                 reject(error.toString());

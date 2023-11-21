@@ -76,6 +76,12 @@ module.exports = {
     },
 
     post_weights: async (req,res) => {
+
+        if (req.session.user_id == undefined) {
+            res.status(500).json(response(baseResponse.SERVER_ERROR, "세션ID가 존재하지 않습니다"));
+            return;
+        }
+
         const post = req.body;
 
         const names = post.names;
@@ -103,6 +109,31 @@ module.exports = {
             console.log(err);
             res.status(500).json(response(baseResponse.SERVER_ERROR, error.message));
         }
+    },
+
+    portfolio_recommend: async (req,res) => {
+        const post = req.body;
+
+        const model_name = req.params.model;
+        const stock_array = post.names;
+        const start_date = post.start_date;
+        const end_date = post.end_date;
+
+        // console.log(stock_array);
+        // const trimmed = names.replace(/'/g, ''); // 따옴표 제거
+        // const stock_array = trimmed.slice(1, -1).split(',');
+
+        // console.log(stock_array);
+
+        pythonController.portfolio_recommend(stock_array, model_name, start_date, end_date)
+                .then((result) => {
+                    console.log('???');
+                    res.status(200).json(response(baseResponse.SUCCESS,result));
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    res.status(500).json(response(baseResponse.SERVER_ERROR, error));
+                });
     }
 }
 
