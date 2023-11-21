@@ -35,7 +35,17 @@ module.exports = {
                 });
                 break;
             case 'index':
+                pythonController.get_names_by_index(index)
+                .then((result) => {
+                    res.status(200).json(response(baseResponse.SUCCESS,result));
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    res.status(500).json(response(baseResponse.SERVER_ERROR, error));
+                });
+                break;
             default:
+                res.status(500).json(response(baseResponse.SERVER_ERROR, "잘못된 searchType 입력값입니다"));
                 break;
         }
     },
@@ -70,7 +80,8 @@ module.exports = {
 
         const names = post.names;
         const trimmed = names.replace(/'/g, ''); // 따옴표 제거
-        const stock_array = trimmed.slice(1, -1).split(',');
+        // const stock_array = trimmed.slice(1, -1).split(',');
+        const stock_array = trimmed.split(',');
 
         const weights = post.weights;
         const weight_array = weights.slice(1, -1).split(',');

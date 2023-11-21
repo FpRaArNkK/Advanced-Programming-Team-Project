@@ -109,6 +109,19 @@ module.exports = {
                 reject(error.toString());
             });
         });
+    },
+
+    get_names_by_index: async (index) => {
+        const inputIndex = index;
+        return new Promise((resolve, reject) => {
+            const result = spawn('python3', ['./controller/pyStocks.py', inputIndex, "get_names_by_index"]);
+            result.stdout.on('data', (result)=>{
+                resolve(result.toString());
+            });
+            result.stderr.on('data', (error)=>{
+                reject(error.toString());
+            });
+        });
     }
     
 }

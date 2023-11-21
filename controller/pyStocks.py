@@ -36,6 +36,64 @@ def get_names_by_name(stock_name):
     
     print(symbol_names)
 
+def get_names_by_index(index):
+    current_dir = os.path.dirname(os.path.realpath(__file__))  # 현재 실행 중인 스크립트의 디렉터리 경로 가져오기
+    folder_dir = os.path.join(current_dir, '../data')  # 상위 디렉터리의 'data' 폴더 경로 설정
+    DATA_FILE = "KSE_FIN_DATA_2023.xlsx"
+
+    data_wb = pd.ExcelFile(folder_dir + "/" + DATA_FILE)
+
+    find_ts = data_wb.parse("Sheet1", index_col=3)  # index_col=3은 Name을 index로.
+
+    # 수익성 지표
+    find_ts ['영업이익율']=find_ts ['영업이익']/find_ts["매출액"]
+    find_ts ['ROE']=find_ts ['당기순이익']/find_ts["총자본"]
+    find_ts ['ROA']=find_ts ['당기순이익']/find_ts["총자산"]
+
+    # 안정성 지표
+    find_ts ['부채비율']=find_ts ['총부채']/find_ts["총자본"]
+
+    # 성장성 지표
+    # 매출액 증가율
+    # 영업이익 증가율
+    # 순이익 증가율
+
+    ps_ts= find_ts[['매출액','영업이익','당기순이익','EPS','BPS','SPS','CFPS','영업이익율','ROE','ROA','부채비율']] 
+
+    yoy=ps_ts/ps_ts.shift(1)-1   
+    name=find_ts['Name']
+
+    yoy = pd.concat([name,yoy],axis=1).dropna()
+
+    # 수익성 지표
+    # fin_combi_Profitability_A = yoy.query('영업이익율>0.3')['Name'].unique()[:50]  # fin_combi_Profitability_A = yoy.query('영업이익율>0.3').set_index('Name').index
+    # fin_combi_Profitability_B = yoy.query('ROE>0.3')['Name'].unique()[:50] #yoy.query('ROE>0.3').set_index('Name').index
+    # fin_combi_Profitability_C = yoy.query('ROA>0.3')['Name'].unique()[:50] #yoy.query('ROA>0.3').set_index('Name').index
+    
+    # 안정성 지표
+    fin_combi_Stabililty_A = yoy.query('부채비율<0.05')['Name'].unique()[:50] #yoy.query('부채비율<0.05').set_index('Name').index
+    
+    # 성장성 지표
+    # fin_combi_Growth_A = yoy.query('매출액>0.3')['Name'].unique()[:50] #yoy.query('매출액>0.3').set_index('Name').index
+    # fin_combi_Growth_B = yoy.query('영업이익>0.3')['Name'].unique()[:50] #yoy.query('영업이익>0.3').set_index('Name').index
+    # fin_combi_Growth_C = yoy.query('당기순이익>0.3')['Name'].unique()[:50] #yoy.query('당기순이익>0.3').set_index('Name').index
+        
+    # 수익성 지표    
+    fin_ex_Profit = yoy.query('(영업이익율 > 0.3) & (ROE > 0.3) & (ROA > 0.3)')['Name'].unique()[:50] #.set_index('Name').index
+    # 성장성 지표
+    fin_ex_Growth = yoy.query('(매출액 > 0.3) & (영업이익 > 0.3) & (당기순이익 > 0.3)')['Name'].unique()[:50] #.set_index('Name').index
+    
+    if (index == "profit") :
+        print(fin_ex_Profit)
+
+    if (index == "stability"):
+        print(fin_combi_Stabililty_A)
+
+    if (index == "growth"):
+        print(fin_ex_Growth)
+       
+        
+    
 
 if __name__ == '__main__':
     if sys.argv[2] == "get_names_by_theme" :
@@ -45,6 +103,9 @@ if __name__ == '__main__':
 
     if sys.argv[2] == "get_names_by_name" :
         inputLine = sys.argv[1]
-        # themes_list = inputLine.split(',') # 쉼표로 분할된 문자열을 배열로 변환
         get_names_by_name(inputLine)
+
+    if sys.argv[2] == "get_names_by_index" :
+        index = sys.argv[1]
+        get_names_by_index(index)
     
