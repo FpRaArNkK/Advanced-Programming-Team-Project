@@ -84,22 +84,34 @@ module.exports = {
         }
 
         const post = req.body;
+        // console.log(post);
+        // const names = post.names;
+        // const trimmed = names.replace(/'/g, ''); // 따옴표 제거
+        // // const stock_array = trimmed.slice(1, -1).split(',');
+        // const stock_array = trimmed.split(',');
 
-        const names = post.names;
-        const trimmed = names.replace(/'/g, ''); // 따옴표 제거
-        // const stock_array = trimmed.slice(1, -1).split(',');
-        const stock_array = trimmed.split(',');
-
-        const weights = post.weights;
-        // const weight_array = weights.slice(1, -1).split(',');
-        const weight_array = weights.split(',');
+        // const weights = post.weights;
+        // // const weight_array = weights.slice(1, -1).split(',');
+        // const weight_array = weights.split(',');
 
 
+        // let input_array = [];
+
+        // for (let i = 0; i < stock_array.length; i++) {
+        //     const selected_stock = { stock: stock_array[i], weight: weight_array[i] };
+        //     input_array.push(selected_stock);
+        // }
+
+        // 빈 배열 생성
         let input_array = [];
 
-        for (let i = 0; i < stock_array.length; i++) {
-            const selected_stock = { stock: stock_array[i], weight: weight_array[i] };
-            input_array.push(selected_stock);
+        // rawData 객체를 배열로 변환
+        for (let i = 0; i < Object.keys(post).length / 2; i++) {
+            // 객체를 생성하고 배열에 추가
+            input_array.push({
+                stock: post[`${i}[names]`],
+                weight: parseInt(post[`${i}[weights]`], 10) // weights 속성을 숫자로 변환
+            });
         }
 
         try {
