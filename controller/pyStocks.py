@@ -91,12 +91,12 @@ def get_names_by_index(index):
         print(fin_ex_Profit)
 
     if (index == "stability"):
-        result = ', '.join(fin_combi_Stabililty_A)
-        print(result)
+        # result = ', '.join(fin_combi_Stabililty_A)
+        print(fin_ex_Profit)
 
     if (index == "growth"):
-        result = ', '.join(fin_ex_Growth)
-        print(result)
+        # result = ', '.join(fin_ex_Growth)
+        print(fin_ex_Growth)
        
 
 def Risk_Contribution(weight,cov_matrix) :
