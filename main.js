@@ -2,10 +2,12 @@ const express = require('express');
 const app = express();
 const cors = require('cors'); //CORS
 app.use(cors({ 
-  // origin: ["http://54.180.150.186:3000", "http://localhost:3000"],
-  origin: '*',
+   origin: ["http://3.39.95.95:3000", "http://localhost:3000"],
+  //origin: '*',
   credentials: true
 }));
+//
+//app.use(cors());
 
 // Router
 const rootRouter = require('./router/rootRouter');
@@ -49,7 +51,7 @@ connect().then(() => {
       res.status(404).json(response(baseResponse.UNKNOWN_URL));
   });
 
-  app.listen(4000, () => console.log('app listening on port 3000'));
+  app.listen(3000, () => console.log('app listening on port 3000'));
 
 }).catch((err) => {
   console.error(err);
