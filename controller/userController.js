@@ -88,7 +88,6 @@ module.exports = {
 
     delete: async (req,res) => {
         try {
-            // const User = require('../schemas/userinfo');
             const result = await User.findByIdAndDelete(req.session.user_id);
     
             req.session.destroy((err) => {
@@ -100,8 +99,6 @@ module.exports = {
                     res.status(200).json({ success: true, message: 'Logout successful', result });
                 }
             });
-    
-            // res.status(200).json(response(baseResponse.SUCCESS, result));
     
         } catch (err) {
             console.log(err);

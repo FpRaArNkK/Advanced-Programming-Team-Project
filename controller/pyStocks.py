@@ -67,18 +67,8 @@ def get_names_by_index(index):
 
     yoy = pd.concat([name,yoy],axis=1).dropna()
 
-    # 수익성 지표
-    # fin_combi_Profitability_A = yoy.query('영업이익율>0.3')['Name'].unique()[:50]  # fin_combi_Profitability_A = yoy.query('영업이익율>0.3').set_index('Name').index
-    # fin_combi_Profitability_B = yoy.query('ROE>0.3')['Name'].unique()[:50] #yoy.query('ROE>0.3').set_index('Name').index
-    # fin_combi_Profitability_C = yoy.query('ROA>0.3')['Name'].unique()[:50] #yoy.query('ROA>0.3').set_index('Name').index
-    
     # 안정성 지표
     fin_combi_Stabililty_A = yoy.query('부채비율<0.05')['Name'].unique()[:50] #yoy.query('부채비율<0.05').set_index('Name').index
-    
-    # 성장성 지표
-    # fin_combi_Growth_A = yoy.query('매출액>0.3')['Name'].unique()[:50] #yoy.query('매출액>0.3').set_index('Name').index
-    # fin_combi_Growth_B = yoy.query('영업이익>0.3')['Name'].unique()[:50] #yoy.query('영업이익>0.3').set_index('Name').index
-    # fin_combi_Growth_C = yoy.query('당기순이익>0.3')['Name'].unique()[:50] #yoy.query('당기순이익>0.3').set_index('Name').index
         
     # 수익성 지표    
     fin_ex_Profit = yoy.query('(영업이익율 > 0.3) & (ROE > 0.3) & (ROA > 0.3)')['Name'].unique()[:50] #.set_index('Name').index
@@ -86,16 +76,12 @@ def get_names_by_index(index):
     fin_ex_Growth = yoy.query('(매출액 > 0.3) & (영업이익 > 0.3) & (당기순이익 > 0.3)')['Name'].unique()[:50] #.set_index('Name').index
     
     if (index == "profit") :
-        # result = ', '.join(fin_ex_Profit)
-        # result = ast.literal_eval(fin_ex_Profit)
         print(fin_ex_Profit)
 
     if (index == "stability"):
-        # result = ', '.join(fin_combi_Stabililty_A)
         print(fin_combi_Stabililty_A)
 
     if (index == "growth"):
-        # result = ', '.join(fin_ex_Growth)
         print(fin_ex_Growth)
        
 
@@ -182,26 +168,23 @@ def get_chart_and_result(stock_array, start_date, end_date, seed_money, weight_a
         r_monthly=m_rate.dropna(axis=0)
         r_monthly.index = r_monthly.index.strftime('%Y-%m')   # 날짜 포멧 변경
 
-        rebalancing_list = pd.date_range(start_date, end_date, freq='Q').strftime('%Y-%m')   # 리밸런싱 주기(분기) 데이터 생성 (연/월 형식)
-            # 밸런싱 주기를 설정합니다. pd.date_range 함수를 사용하여 시작 날짜부터 끝 날짜까지 분기(quarterly) 주기로 날짜를 생성합니다. 
-            # 그리고 strftime 함수를 사용하여 날짜 형식을 '연/월' 형식으로 변환하여 rebalancing_list에 저장합니다. 
-            # 이렇게 생성된 리스트에는 리밸런싱을 수행할 연도와 월이 담겨 있습니다.
+        investment_period = pd.date_range(start_date, end_date, freq='Q').strftime('%Y-%m')  
+            # 투자기간을 설정합니다. pd.date_range 함수를 사용하여 시작 날짜부터 끝 날짜까지 분기(quarterly) 주기로 날짜를 생성합니다. 
+            # 그리고 strftime 함수를 사용하여 날짜 형식을 '연/월' 형식으로 변환하여 investment_period 저장합니다. 
 
         column_list = ['portfolio']
-        portfolio_ret_df = pd.DataFrame(columns=column_list, index = cprice.loc[rebalancing_list[0]:].index) #  포트폴리오 일간 수익률 저장
+        portfolio_ret_df = pd.DataFrame(columns=column_list, index = cprice.loc[investment_period[0]:].index) #  포트폴리오 일간 수익률 저장
 
-        weights = {'삼성SDI': 0.2471,'카카오': 0.2006,'남양유업': 0.2481,'대구백화점': 0.1616,'강남제비스코': 0.1426}
+        for i in range(len(investment_period)):     
 
-        for i in range(len(rebalancing_list)):     
-
-            ym = r_monthly[r_monthly.index==rebalancing_list[i]].squeeze() # 시리즈로 변환
+            ym = r_monthly[r_monthly.index==investment_period[i]].squeeze() # 시리즈로 변환
 
             filtered_index = [idx for idx in ym.index if idx in stock_array]
             filtered_ym = ym[ym.index.isin(filtered_index)]
             port_list = filtered_ym.index
 
             ### 포트폴리오 일간수익률    :  종목군들을 주가 데이터 날짜에 매칭하여   각 종목군별 일간 주가 수익률 평균 구해 저장
-            portfolio_ret_df['portfolio'].loc[rebalancing_list[i]:]= cprice[port_list].loc[rebalancing_list[i]:].pct_change(1).mul(pd.Series(weights), axis=1).sum(axis=1)
+            portfolio_ret_df['portfolio'].loc[investment_period[i]:]= cprice[port_list].loc[investment_period[i]:].pct_change(1).mul(pd.Series(weight_array), axis=1).sum(axis=1)
             
         portfolio_ret_df.iloc[0] = 0
         portfolio_ret_df = portfolio_ret_df.dropna()

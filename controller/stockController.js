@@ -125,25 +125,9 @@ module.exports = {
         const stock_array = post.names;
         const start_date = post.start_date;
         const end_date = post.end_date;
-        // const selected_stocks = req.session.selected_stocks
-        // const start_date = req.session.invest_start;
-        // const end_date = req.session.invest_end;
-
-        // const stock_array = [];
-        // // 객체 배열을 순회하며 stocks 배열에 데이터 추가
-        // selected_stocks.forEach(item => {
-        //     stock_array.push(item.stock);
-        // });
-
-        // console.log(stock_array);
-        // const trimmed = names.replace(/'/g, ''); // 따옴표 제거
-        // const stock_array = trimmed.slice(1, -1).split(',');
-
-        // console.log(stock_array);
 
         pythonController.portfolio_recommend(stock_array, model_name, start_date, end_date)
                 .then((result) => {
-                    // console.log('???');
                     res.status(200).json(response(baseResponse.SUCCESS,result));
                 })
                 .catch((error) => {
@@ -153,7 +137,15 @@ module.exports = {
     },
 
     get_chart_and_result: async (req,res) => {
-        pythonController.get_chart_and_result()
+        const post = req.body;
+
+        const seed_money = post.seed_money;
+        const stock_array = post.names;
+        const weight_array = post.weights;
+        const start_date = post.start_date;
+        const end_date = post.end_date;
+
+        pythonController.get_chart_and_result(stock_array, start_date, end_date, seed_money, weight_array)
                 .then((result) => {
                     console.log(result);
                     res.status(200).json(response(baseResponse.SUCCESS,result));
